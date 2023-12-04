@@ -1,15 +1,16 @@
 #include "../include/token.h"
 
-memory_t *memory_init(arena_t *a, u64 size){
+memory_t *memory_init(u64 size){
     memory_t *mem = calloc(1, sizeof(struct STRUCT_MEM));
-    mem->tokens = arena_alloc(a, size);
+    mem->tokens = calloc(size, sizeof(u8));
     mem->arena_i = 0;
+    mem->arena_size = size;
     mem->class_size = 0;
 
     return mem;
 }
 
-u8 token_print_size(int type){
+u1 token_size(int type){
     switch (type) {
         case ID: return 2; break;
         case INTEGER: return 7; break;
@@ -57,7 +58,6 @@ u8 token_print_size(int type){
         case TRUE: return 4; break;
         case FALSE:  return 5; break;
         case NOT: return 3; break;
-        default: fprintf(f,"invalid");
     }
 
     return 0;

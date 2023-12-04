@@ -10,6 +10,8 @@ lexer_t *lexer_init(char *file, u64 file_size){
     lexer->file = file; 
     lexer->file_size = file_size;
     lexer->c = lexer->file[0];
+    lexer->line = 1;
+    lexer->column = 1;
     lexer->i = 0;
 
     return lexer;
@@ -28,24 +30,31 @@ void lexer_print(lexer_t *lexer, memory_t *mem, FILE* file){
     fprintf(file, "Token Stream from Lexical Analysis:\n");
     for(int i = 0; i < mem->arena_i; ++i){
         if(mem->tokens[i] == LITERAL || mem->tokens[i] == TYPE_ID || mem->tokens[i] == OBJECT_ID || mem->tokens[i] == INTEGER){
-            fprintf(file , "Token(%i): ", mem->tokens[i]);
+            fprintf(file , "Token(%i) at %i|%i: ", mem->tokens[i], mem->tokens[i+1], mem->tokens[i+2]);
             token_print_string(mem->tokens[i], file);
             fprintf(file , "<");
+            i+=2;;
             while(mem->tokens[++i] != '\0'){
                 fprintf(file, "%c", mem->tokens[i]);
             }
             fprintf(file , ">\n");
         }else{
-            fprintf(file , "Token(%i): ", mem->tokens[i]);
+            fprintf(file , "Token(%i) at %i|%i: ", mem->tokens[i], mem->tokens[i+1], mem->tokens[i+2]);
             token_print_string(mem->tokens[i], file);
+            i+=2;;
             fprintf(file, "\n");
         }
     }
 }
 
 void lexer_eat_n(lexer_t *lexer, u64 n){
-    if(lexer->i < lexer->file_size && lexer->c != '\0'){
-        lexer->i += n;
+    for(u8 i = 0; i < n && lexer->i < lexer->file_size && lexer->c != '\0'; ++i){
+        if(lexer->c == '\n'){
+            lexer->line++;
+            lexer->column = 0;
+        }lexer->column++;
+        
+        lexer->i++;
         lexer->c = lexer->file[lexer->i];
     }
 }
@@ -53,6 +62,8 @@ void lexer_eat_n(lexer_t *lexer, u64 n){
 void lexer_eat_arena(lexer_t *lexer, memory_t *mem, u1 type, u64 n){ 
     if(type == CLASS) mem->class_size++;
     mem->tokens[mem->arena_i++] = type;
+    mem->tokens[mem->arena_i++] = lexer->line;
+    mem->tokens[mem->arena_i++] = lexer->column;
     lexer_eat_n(lexer, n);
 }
 
@@ -174,6 +185,8 @@ void lexer_eat_whitespace(lexer_t *lexer){
 void lexer_eat_integer(lexer_t *lexer, memory_t *mem){ 
     if(isdigit(lexer->c)){
         mem->tokens[mem->arena_i++] = INTEGER;
+        mem->tokens[mem->arena_i++] = lexer->line;
+        mem->tokens[mem->arena_i++] = lexer->column;
         while(isdigit(lexer->c)){    
             mem->tokens[mem->arena_i++] = lexer->c;
             lexer_eat_n(lexer, 1);
@@ -185,6 +198,8 @@ void lexer_eat_integer(lexer_t *lexer, memory_t *mem){
 void lexer_eat_string(lexer_t *lexer, memory_t *mem){
     if(lexer->c == '"'){
         mem->tokens[mem->arena_i++] = LITERAL;
+        mem->tokens[mem->arena_i++] = lexer->line;
+        mem->tokens[mem->arena_i++] = lexer->column;
         lexer_eat_n(lexer, 1);
         while(lexer->c != '"'){
             mem->tokens[mem->arena_i++] = lexer->c;
@@ -198,6 +213,8 @@ void lexer_eat_string(lexer_t *lexer, memory_t *mem){
 void lexer_eat_type(lexer_t *lexer, memory_t *mem){
     if(isupper(lexer->c)){
         mem->tokens[mem->arena_i++] = TYPE_ID;
+        mem->tokens[mem->arena_i++] = lexer->line;
+        mem->tokens[mem->arena_i++] = lexer->column;
         while(isalnum(lexer->c) || lexer->c == '_'){
             mem->tokens[mem->arena_i++] = lexer->c;
             lexer_eat_n(lexer, 1);
@@ -211,6 +228,8 @@ void lexer_eat_object(lexer_t *lexer, memory_t *mem){
     lexer_eat_keyword(lexer, mem);
     if(islower(lexer->c)){
         mem->tokens[mem->arena_i++] = OBJECT_ID;
+        mem->tokens[mem->arena_i++] = lexer->line;
+        mem->tokens[mem->arena_i++] = lexer->column;
         while(isalnum(lexer->c) || lexer->c == '_'){
             mem->tokens[mem->arena_i++] = lexer->c;
             lexer_eat_n(lexer, 1);

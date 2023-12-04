@@ -4,6 +4,8 @@ typedef struct STRUCT_LEXER{
     char c;
     u64 i;
     u64 file_size;
+    u8 line;
+    u8 column;
 }lexer_t;
 
 lexer_t *lexer_init(char *file, u64 file_size);

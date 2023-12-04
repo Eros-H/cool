@@ -1,9 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
-#include "arena.h"
+#include "utils.h"
 #ifndef TOKEN
 #define TOKEN
-enum type_t : u1{
+enum type_t : u8{
     INTEGER = 128,
     LITERAL, BOOLEAN,
     ID,
@@ -52,12 +53,13 @@ enum type_t : u1{
     INVALID
 };
 typedef struct STRUCT_MEM{
-    u1 *tokens;
+    u8 *tokens;
     u64 arena_i;
     u64 class_size;
+    u64 arena_size;
 }memory_t;
 
-memory_t *memory_init(arena_t *a, u64 size);
+memory_t *memory_init(u64 size);
 void token_print_string(int type, FILE *f);
-u8 token_print_size(int type);
+u1 token_size(int type);
 #endif
