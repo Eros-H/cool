@@ -1,0 +1,20 @@
+Token Stream from Lexical Analysis:
+Token(136) at 1|1: class
+Token(133) at 1|7: type_ID<Main>
+Token(143) at 1|12: inherits
+Token(133) at 1|21: type_ID<IO>
+Token(168) at 1|24: lbrak
+Token(132) at 2|3: object_ID<main>
+Token(166) at 2|7: lparen
+Token(167) at 2|8: rparen
+Token(169) at 2|10: colon
+Token(133) at 2|12: type_ID<Object>
+Token(168) at 2|19: lbrak
+Token(132) at 3|5: object_ID<out_string>
+Token(166) at 3|15: lparen
+Token(129) at 3|16: literal<Hello, world.\n>
+Token(167) at 3|33: rparen
+Token(173) at 4|3: rbrak
+Token(171) at 4|5: semicolon
+Token(173) at 5|1: rbrak
+Token(171) at 5|3: semicolon
