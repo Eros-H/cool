@@ -50,19 +50,21 @@ void compile(char *file){
     char *file_debugger = file_out(file);
     FILE *f = fopen(file_debugger, "w");
 
-    arena_t a = {0};
-    arena_init(&a, file_size);
     
-    memory_t *mem = memory_init(&a, file_size);
+    memory_t *mem = memory_init(file_size*3);
     lexer_t *lexer = lexer_init(file_buffer, file_size); 
     lexer_scan(lexer, mem); 
     lexer_print(lexer, mem, f);
+
+    ast_t *ast = ast_init(mem->class_size); 
+    parser_t *parser = parser_init(mem);
+    parser_parse(parser, &ast);
+    ast_print(ast, mem, f);
     
     if(f) fclose(f);
     free(file_debugger);
     
     lexer_free(lexer);
-    arena_free(&a);
 }
 
 
