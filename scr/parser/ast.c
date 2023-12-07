@@ -52,27 +52,6 @@ void tree_print(struct tree *root, memory_t *mem, int spaces, FILE *f) {
     fprintf(f,"\n");
     tree_print(root->left_derive, mem, spaces+x, f);
 }
-
-void tree_print_full(struct tree *root, memory_t *mem, int spaces, FILE *f) {
-    if (root == NULL) return;
-
-    size_t x = 0;
-    if(root->data_i != 0) for(int i = root->data_i; mem->tokens[i-1] != '\0'; ++x, ++i);
-    tree_print_full(root->right_value, mem, spaces+token_size(root->type)+x, f);
-
-    for (int i = 0; i < spaces; i++) {
-        fprintf(f," ");
-    }
-    x = 0;
-    token_print_string(root->type, f);
-    if(root->data_i != 0){
-        fprintf(f,":");
-        for(int i = root->data_i; mem->tokens[i-1] != '\0'; ++x, ++i) fprintf(f,"%c", mem->tokens[i]); 
-    }
-    fprintf(f,"\n");
-    tree_print_full(root->left_derive, mem, spaces+token_size(root->type)+x, f);
-}
-
 void ast_print_spaces(ast_t *ast, memory_t *mem, int spaces, FILE *f){
     for(int i = 0; i < ast->class_size; ++i){
         tree_print(ast->classe[i], mem, 0, f);
