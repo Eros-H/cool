@@ -59,7 +59,7 @@ void compile(char *file){
     ast_t *ast = ast_init(mem->class_size); 
     parser_t *parser = parser_init(mem);
     parser_parse(parser, &ast);
-    ast_print(ast, mem, f);
+    ast_print(ast, mem, stdout);
     
     if(f) fclose(f);
     free(file_debugger);
