@@ -50,6 +50,8 @@ enum type_t : u8{
     SEMICOLON,
     DOT,
     RBRAK,
+    EXPRESSION,
+    FEATURE,
     INVALID
 };
 typedef struct STRUCT_MEM{

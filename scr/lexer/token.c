@@ -24,6 +24,7 @@ u1 token_size(int type){
         case COMMA: return 5; break;
         case COLON: return 5; break;
         case SEMICOLON: return 9; break; 
+        case EXPRESSION: return 10; break; 
         case LPAREN: return 6; break;
         case RPAREN: return 6; break;
         case LBRAK: return 4; break;
@@ -43,6 +44,7 @@ u1 token_size(int type){
         case THEN: return 4; break;
         case LESS: return 4; break;
         case LESSEQ: return 6; break;
+        case FEATURE: return 7 ; break;
         case ARROBA: return 6; break;
         case LOOP: return 4; break;
         case POOL: return 4; break;
@@ -108,6 +110,8 @@ void token_print_string(int type, FILE *f) {
         case IN: fprintf(f,"in"); break;
         case ISVOID: fprintf(f,"isvoid"); break;
         case INHERITS: fprintf(f,"inherits"); break;
+        case EXPRESSION: fprintf(f,"expression"); break;
+        case FEATURE: fprintf(f,"feature"); break;
         case TRUE: fprintf(f,"true"); break;
         case FALSE: fprintf(f,"false"); break;
         case NOT: fprintf(f,"not"); break;

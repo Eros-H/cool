@@ -69,6 +69,11 @@ void lexer_eat_arena(lexer_t *lexer, memory_t *mem, u1 type, u64 n){
 
 void lexer_eat_keyword(lexer_t *lexer, memory_t *mem){        
     switch(lexer->c){
+        case 'C':{
+                     if(lexer_peek(lexer,1) == 'l')if(lexer_peek(lexer,2) == 'a')if(lexer_peek(lexer,3) == 's')if(lexer_peek(lexer,4) == 's')if(ispeeker(lexer_peek(lexer,5))){
+                         lexer_eat_arena(lexer, mem, CLASS, 5);
+                     }
+                 }break;
         case 'c':{
                      if(lexer_peek(lexer,1) == 'a')if(lexer_peek(lexer,2) == 's')if(lexer_peek(lexer,3) == 'e')
                          if(ispeeker(lexer_peek(lexer,4))){
