@@ -8,5 +8,5 @@ typedef struct{
 parser_t *parser_init(memory_t *mem);
 void parser_free(parser_t *parser);
 void parser_parse(parser_t *parser, ast_t **ast);
-void parser_ast_exp(parser_t *parser, struct tree *tree);
+struct tree *parser_ast_exps(parser_t *parser, struct tree *tree);
 #endif
